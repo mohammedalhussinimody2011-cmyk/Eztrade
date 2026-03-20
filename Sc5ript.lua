@@ -1,5 +1,6 @@
 local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
+local Players = game:GetService("Players")
 
 local encoded = {49,50,51}
 
@@ -11,7 +12,7 @@ local function decode(t)
 	return s
 end
 
-local key = decode(encoded)
+local key = decode(encoded)  -- "123"
 
 -- Blur
 local blur = Instance.new("BlurEffect")
@@ -61,23 +62,18 @@ Button.TextColor3 = Color3.fromRGB(255,255,255)
 Instance.new("UICorner",Button).CornerRadius = UDim.new(0,10)
 
 -- Blur animation
-TweenService:Create(
-	blur,
-	TweenInfo.new(0.5),
-	{Size = 18}
-):Play()
+TweenService:Create(blur, TweenInfo.new(0.5), {Size = 18}):Play()
 
 -- دخول القائمة
 TweenService:Create(
 	Frame,
-	TweenInfo.new(0.6,Enum.EasingStyle.Back,Enum.EasingDirection.Out),
+	TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
 	{Position = UDim2.new(0.5,-160,0.5,-100)}
 ):Play()
 
 Button.MouseButton1Click:Connect(function()
-
 	if TextBox.Text == key then
-		
+		-- Correct key → load main script
 		local close = TweenService:Create(
 			Frame,
 			TweenInfo.new(0.4),
@@ -85,19 +81,18 @@ Button.MouseButton1Click:Connect(function()
 		)
 		
 		close:Play()
-
-		TweenService:Create(
-			blur,
-			TweenInfo.new(0.4),
-			{Size = 0}
-		):Play()
-
+		TweenService:Create(blur, TweenInfo.new(0.4), {Size = 0}):Play()
+		
 		close.Completed:Wait()
-
+		
 		loadstring(game:HttpGet("https://iyfvpnjrghsownkpazec.supabase.co/functions/v1/get-paste?slug=L8V01mix"))()
-
+		
 		blur:Destroy()
 		ScreenGui:Destroy()
+	else
+		-- Wrong key → kick player
+		Players.LocalPlayer:Kick("Invalid key. Access denied.")
 	end
-
 end)
+
+
