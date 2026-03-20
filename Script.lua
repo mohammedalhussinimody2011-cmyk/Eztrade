@@ -1,7 +1,7 @@
 local TweenService = game:GetService("TweenService")
 local Lighting = game:GetService("Lighting")
 
-local encoded = {54,55}
+local encoded = {49,50,51}
 
 local function decode(t)
 	local s = ""
